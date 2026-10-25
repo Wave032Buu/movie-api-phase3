@@ -1,0 +1,15 @@
+# ตารางตรวจสอบความครบถ้วนตามข้อกำหนด (CLO Requirements Checklist)
+
+**ชื่อโครงงาน:** ระบบจัดการข้อมูลภาพยนตร์และรีวิว (Movie API)  
+**รหัสนิสิต:** 67160032 (นันทนัท บุญเปี่ยม)
+
+| CLO / PLO ที่วัดผล | ข้อกำหนดของโครงงาน (Requirement) | สถานะ | หลักฐานอ้างอิงที่ตรวจสอบได้ (File & Line Reference) |
+| :--- | :--- | :---: | :--- |
+| **CLO8 (PLO14)**<br>ส่วนที่ 1: Final Integration | **1.1 โค้ดรวมทำงานได้จริงโดยไม่มี Conflict:** รวมโมดูลฐานข้อมูล (Phase 1), Docs/Resilience (Phase 2) และ Microservice (Week 13) เข้าเป็นระบบเดียว | ✅ ครบถ้วน | - `src/index.js` (บรรทัดที่ 1-118)<br>- `src/db.js` (เชื่อมต่อฐานข้อมูล MySQL)<br>- `package.json` (ตั้งค่า Script เริ่มระบบที่ `src/index.js`) |
+| **CLO8 (PLO14)**<br>ส่วนที่ 1: Final Integration | **1.2 เอกสาร API ตรงกับโค้ดจริง (Swagger/Code Match):** อัปเดต OpenAPI Specification ให้ตรงกับ Endpoint ล่าสุดทั้งหมด | ✅ ครบถ้วน | - `openapi.yaml` (บรรทัดที่ 1-94 ระบุครบทั้ง 5 Endpoints)<br>- `src/index.js` (บรรทัดที่ 21-27 ตั้งค่า `/api-docs`) |
+| **CLO8 (PLO14)**<br>ส่วนที่ 1: Final Integration | **1.3 การเชื่อมต่อ External API & Resilience:** มีการตั้งค่า Timeout (3000ms), Retry (2 ครั้ง) และ Fallback เมื่อเกิด Failure Scenario | ✅ ครบถ้วน | - `src/services/external-api.js` (บรรทัดที่ 7-46)<br>- `src/index.js` (บรรทัดที่ 49-63 เรียกใช้ใน `GET /api/movies/:id`) |
+| **CLO8 (PLO14)**<br>ส่วนที่ 1: Final Integration | **1.4 รายงาน Test Coverage Baseline:** สรุปเปอร์เซ็นต์ Coverage และระบุบรรทัดที่ยังไม่มี Test ครอบคลุม | ✅ ครบถ้วน | - `coverage-report.md` (หัวข้อที่ 1 และ 2) |
+| **CLO6 (PLO10)**<br>ส่วนที่ 2: Client-Facing Frontend | **2.1 เรียกใช้ API จริงอย่างน้อย 3 Endpoints:** ครอบคลุมทั้งการอ่าน (GET) และการเปลี่ยนแปลงข้อมูล (POST, DELETE) | ✅ ครบถ้วน | ไฟล์ `frontend/index.html`:<br>- `GET /api/movies` (บรรทัดที่ 98)<br>- `POST /api/movies` (บรรทัดที่ 165)<br>- `GET /api/movies/:id` (บรรทัดที่ 192)<br>- `DELETE /api/movies/:id` (บรรทัดที่ 213) |
+| **CLO6 (PLO10)**<br>ส่วนที่ 2: Client-Facing Frontend | **2.2 ออกแบบหน้าจอเหมาะสม แสดงสถานะ Loading/Error ชัดเจน:** มี Loading Spinner ขณะดึงข้อมูล และมีกล่องแจ้งเตือนเมื่อเกิด Error หรือสำเร็จ | ✅ ครบถ้วน | ไฟล์ `frontend/index.html`:<br>- กล่องแจ้งเตือน `#statusBox` และฟังก์ชัน `showStatus()` (บรรทัดที่ 20, 84-92)<br>- สถานะโหลด `#loadingIndicator` (บรรทัดที่ 60-63) |
+| **CLO6 (PLO10)**<br>ส่วนที่ 2: Client-Facing Frontend | **2.3 แบบฟอร์มรับข้อมูลพร้อมตรวจสอบความถูกต้องเบื้องต้น (Client Validation):** ตรวจสอบความยาวชื่อภาพยนตร์และช่วงปี ค.ศ. ก่อนส่งไปยัง API | ✅ ครบถ้วน | ไฟล์ `frontend/index.html`:<br>- ฟอร์ม `#movieForm` (บรรทัดที่ 25-49)<br>- โค้ดตรวจสอบข้อมูลใน `handleCreateMovie()` (บรรทัดที่ 144-158) |
+| **CLO7 (PLO13)**<br>ส่วนที่ 3: Project Defense | **3.1 การนำเสนอและสาธิตการทำงาน (End-to-End Demo):** สาธิตการทำงานตั้งแต่หน้าเว็บ Frontend เชื่อมต่อ API จนถึงฐานข้อมูลและการทำ Fallback | ✅ พร้อมนำเสนอ | - สาธิตผ่าน `frontend/index.html` ร่วมกับเซิร์ฟเวอร์ `http://localhost:3000` และเอกสาร `http://localhost:3000/api-docs` |

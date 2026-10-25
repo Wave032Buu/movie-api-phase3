@@ -1,0 +1,156 @@
+openapi: 3.0.0
+info:
+  title: Movie API
+  description: API สำหรับระบบจัดการข้อมูลภาพยนตร์และรีวิว (Project Phase 2)
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local Development Server
+
+paths:
+  /movies:
+    get:
+      summary: ดึงรายการภาพยนตร์ทั้งหมด
+      description: คืนค่ารายการภาพยนตร์ทั้งหมดในระบบ (รองรับ Pagination)
+      responses:
+        '200':
+          description: สำเร็จ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Movie'
+    post:
+      summary: เพิ่มข้อมูลภาพยนตร์ใหม่
+      description: สร้างเรคคอร์ดภาพยนตร์ใหม่ในระบบ (ต้องมีสิทธิ์ Admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieInput'
+      responses:
+        '201':
+          description: สร้างสำเร็จ
+        '400':
+          description: ข้อมูลไม่ครบถ้วนหรือไม่ถูกต้อง
+
+  /movies/{id}:
+    get:
+      summary: ดึงข้อมูลภาพยนตร์ตาม ID
+      description: คืนค่ารายละเอียดของภาพยนตร์ 1 เรื่อง
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: สำเร็จ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '404':
+          description: ไม่พบภาพยนตร์ที่ระบุ
+    put:
+      summary: แก้ไขข้อมูลภาพยนตร์
+      description: อัปเดตข้อมูลภาพยนตร์ตาม ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieInput'
+      responses:
+        '200':
+          description: อัปเดตสำเร็จ
+        '404':
+          description: ไม่พบภาพยนตร์ที่ระบุ
+    delete:
+      summary: ลบข้อมูลภาพยนตร์
+      description: ลบภาพยนตร์ออกจากระบบ
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ลบสำเร็จ
+        '404':
+          description: ไม่พบภาพยนตร์ที่ระบุ
+
+  /movies/{id}/reviews:
+    post:
+      summary: เพิ่มรีวิวให้ภาพยนตร์
+      description: ผู้ใช้ทั่วไปสามารถเพิ่มคะแนนรีวิวให้ภาพยนตร์ได้
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+                  example: 5
+                comment:
+                  type: string
+                  example: "หนังสนุกมาก ภาพสวยสุดๆ"
+      responses:
+        '201':
+          description: เพิ่มรีวิวสำเร็จ
+        '404':
+          description: ไม่พบภาพยนตร์ที่ระบุ
+
+components:
+  schemas:
+    Movie:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Inception"
+        director:
+          type: string
+          example: "Christopher Nolan"
+        release_year:
+          type: integer
+          example: 2010
+    MovieInput:
+      type: object
+      required:
+        - title
+        - director
+      properties:
+        title:
+          type: string
+          example: "Interstellar"
+        director:
+          type: string
+          example: "Christopher Nolan"
+        release_year:
+          type: integer
+          example: 2014
